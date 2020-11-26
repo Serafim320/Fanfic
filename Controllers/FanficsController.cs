@@ -11,9 +11,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Amazon;
-using Amazon.S3;
-using Amazon.S3.Transfer;
 
 namespace fanfic.by.Controllers
 {
@@ -34,17 +31,20 @@ namespace fanfic.by.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index()
         {
-            var fanficContext = _context.Fanfics.Include(f => f.Genre).Include(g => g.ImageFanfic);
-
-            var user = await _userManager.GetUserAsync(User);
-            var id = _userManager.GetUserId(User);
-
-            ViewBag.UserId = id;
-
-            return View(await fanficContext.ToListAsync());
-
+            var fanficContext = _context.Fanfics.Include(f => f.Genre).Include(g => g.ImageFanfic).ToList();
+            if (User.Identity.IsAuthenticated)
+            {
+                for (int i = 0; i < fanficContext.Count(); i++)
+                {
+                    var user = await _userManager.GetUserAsync(User);
+                    var id = _userManager.GetUserId(User);
+                    fanficContext[i].IsLiked = _context.Likes.Where(item => item.IdUser == id && item.IdFanfic == fanficContext[i].Id).Count() != 0;
+                    ViewBag.UserId = id;
+                }
+            }
+            return View(fanficContext);
         }
 
         public IActionResult Create()
@@ -95,6 +95,32 @@ namespace fanfic.by.Controllers
                 update.kolLikes -= 1;
                 _context.SaveChanges();
                 return RedirectToAction("Index", "Home");
+            }
+        }
+
+        public ActionResult LikeInYourFanfic(int id, string idUser)
+        {
+            Fanfic update = _context.Fanfics.ToList().Find(u => u.Id == id);
+
+            if (_context.Likes.Where(item => item.IdUser == idUser && item.IdFanfic == id).Count() == 0)
+            {
+
+                _context.Likes.Add(new Like() { IdFanfic = id, IdUser = idUser });
+
+                update.kolLikes += 1;
+                _context.SaveChanges();
+                return RedirectToAction("Index", "Fanfics");
+            }
+            else
+            {
+                Like likeUser = _context.Likes.ToList().Find(u => u.IdUser == idUser);
+                Like likeFanfic = _context.Likes.ToList().Find(u => u.IdFanfic == id);
+
+                _context.Likes.Remove(_context.Likes.FirstOrDefault(item => item.IdUser == idUser && item.IdFanfic == id));
+
+                update.kolLikes -= 1;
+                _context.SaveChanges();
+                return RedirectToAction("Index", "Fanfics");
             }
         }
 
