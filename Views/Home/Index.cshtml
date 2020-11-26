@@ -37,7 +37,7 @@
                             <button class="like-toggle basic">♥</button>
                         }
                         <input type="hidden" name="Id" value="@item.Id" />
-                        <input type="hidden" name="idUser" value="@item.UserId" />
+                        <input type="hidden" name="idUser" value="@ViewBag.UserId" />
                         <span>@Html.DisplayFor(modelItem => item.kolLikes) Likes</span>
                     </form>
                 </td>

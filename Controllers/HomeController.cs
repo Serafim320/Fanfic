@@ -33,7 +33,7 @@ namespace fanfic.by.Controllers
                     var user = await _userManager.GetUserAsync(User);
                     var id = _userManager.GetUserId(User);
                     fanficContext[i].IsLiked = _context.Likes.Where(item => item.IdUser == id && item.IdFanfic == fanficContext[i].Id).Count() != 0;
-
+                    ViewBag.UserId = id;
                 }    
             }
             return View(fanficContext);
