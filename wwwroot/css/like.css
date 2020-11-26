@@ -1,0 +1,25 @@
+﻿* {
+    transition: all 0.2s linear;
+}
+
+.like, p {
+    font-family: 'Open Sans';
+}
+
+.like-toggle {
+    outline: none;
+    box-shadow: none;
+    border: none;
+    width: 35px;
+    height: 35px;
+    font-size: 1.3em;
+    border-radius: 100px;
+}
+
+.like-active.basic {
+    outline: none;
+    box-shadow: none;
+    border: none;
+    background: blue;
+    color: white;
+}

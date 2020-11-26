@@ -1,0 +1,32 @@
+﻿@model fanfic.by.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Вход в Fanfic.by";
+}
+
+<div class="container">
+    <h2 class="text-center">Вход в приложение</h2>
+    <form method="post" asp-controller="Account" asp-action="Login"
+          asp-route-returnUrl="@Model.ReturnUrl">
+
+        <div asp-validation-summary="ModelOnly" class="form-group row justify-content-md-center"></div>
+
+        <div class="form-group row justify-content-md-center">
+            <label asp-for="Email" class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-5">
+                <input asp-for="Email" type="email" class="form-control" placeholder="Email" />
+                <span asp-validation-for="Email"></span>
+            </div>
+        </div>
+        <div class="form-group row justify-content-md-center">
+            <label asp-for="Password" class="col-sm-2 col-form-label">Пароль</label>
+            <div class="col-sm-5">
+                <input asp-for="Password" type="password" class="form-control" placeholder="Пароль" />
+                <span asp-validation-for="Password"></span>
+            </div>
+        </div>
+        <div class="form-group row justify-content-md-center">
+            <input type="submit" value="Войти" class="btn btn-primary center" />
+        </div>
+    </form>
+</div>

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<fanfic.by.Models.Fanfic>
+
+@{
+    ViewData["Title"] = "Fanfic.by";
+}
+
+<h3>Фанфики</h3>
+
+<head>
+    <link href="~/css/image.css" rel="stylesheet" />
+</head>
+
+<table class="table">
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            if (item.UserId == @ViewBag.UserId)
+            {
+                <tr>
+                    <td>
+                        <img src="@item.ImageFanfic.Link" class="img-on-site" />
+                    </td>
+                    <td>
+                        <div>
+                            <p class="font-weight-bold"><h4>@Html.DisplayFor(modelItem => item.Name)</h4></p>
+                            <p class="text-muted">@Html.DisplayFor(modelItem => item.Genre.Name)</p>
+                            <p>@Html.DisplayFor(modelItem => item.ShortDescription)</p>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
